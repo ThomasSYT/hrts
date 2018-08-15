@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.examngfinal.dao.SysFunDao">
+	<select id="findFunAll" resultType="sysfun" parameterType="user">
+		SELECT * FROM sys_fun ,sys_rolefun WHERE sys_rolefun.roleId=#{roleId} AND sys_fun.funId=sys_rolefun.funId
+	</select>
+	<select id="findFun" resultType="sysfun" parameterType="int">
+		select * from sys_fun where funId=#{id}
+	</select>
+	<select id="findFunId" resultType="int">
+	select funId from sys_fun order by funId desc limit 0,1
+	</select>
+	<insert id="addFun" parameterType="sysfun">
+	    insert into sys_fun values (default,#{sys_funId},#{text},#{attributes},#{funzOrder})
+	</insert>
+	<insert id="addRoleFun">
+	    insert into sys_rolefun values(#{0},#{1})
+	</insert>
+	<update id="updateFun" parameterType="sysfun">
+	    update sys_fun set text=#{text},attributes=#{attributes},funzOrder=#{funzOrder}
+	    where funId=#{funId}
+	</update>
+	<delete id="delRoleFun">
+	    delete from sys_rolefun where funId=#{funId}
+	</delete>
+	<delete id="delFun" parameterType="sysfun">
+	    delete from sys_fun where funId=#{funId}
+	</delete>
+</mapper>

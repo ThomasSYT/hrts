@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.examngfinal.dao.JobExamDao">
+	 <!-- 显示所有考评记录-->
+	<select id="findAllExam" resultType="jobExam">
+		select * from job_exam 
+	</select>
+	<!-- 获取ID用于判断-->
+	<select id="findEmid" resultType="jobExam">
+		select * from job_exam where em_id = #{emId}
+	</select>
+	
+	<!-- 添加员工考评 -->
+	<insert id="addEmpExam" parameterType="jobExam">
+		insert into job_exam (ex_id,taskid,em_id,ex_pername,ex_date,ex_num,workload,
+		quality,timeuse,performancetext,communicate,decision,innovate,execute,abilitytext,
+		Responsibility,Discipline,Cooperation,attitudetext,log,learn,Attendance,abilitydepart,
+		total,jb_emname) 
+		values (#{exId},#{taskId},#{emId},
+		#{exPername},#{exDate},#{exnum},#{workload},#{quality},#{timeuse},
+		#{performancetext},#{communicate},#{decision},#{innovate},#{execute},
+		#{abilitytext},#{responsibility},#{discipline},
+		#{cooperation},#{attitudetext},#{log},#{learn},#{attendance},#{abilitydepart},#{total},
+		#{jbemname})
+		
+	</insert>
+	<!-- 添加标准考评 -->
+	<insert id="addManExam" parameterType="jobExam">
+		insert into job_exam (ex_id,taskid,em_id,ex_pername,ex_date,ex_num,workload,
+		quality,timeuse,performancetext,communicate,decision,innovate,execute,abilitytext,
+		Responsibility,Discipline,Cooperation,attitudetext,log,learn,Attendance,abilitydepart,
+		total,jb_emname) 
+		values (#{exId},#{taskId},#{emId},
+		#{exPername},#{exDate},#{exnum},#{workload},#{quality},#{timeuse},
+		#{performancetext},#{communicate},#{decision},#{innovate},#{execute},
+		#{abilitytext},#{responsibility},#{discipline},
+		#{cooperation},#{attitudetext},#{log},#{learn},#{attendance},#{abilitydepart},#{total},
+		#{jbemname})
+		
+	</insert>
+	<!-- 插入能力态度值和总分 -->
+	<insert id="SetAbilitydepart" parameterType="abilityVo">
+		insert into job_exam (abilitydepart,total,ex_num) 
+		values (#{abilitydepart},#{total},#{exnum})
+		where ex_id = #{exId}
+		
+	</insert>
+	
+	
+	<!-- 添加员工申诉 -->
+	<insert id="addComplain" parameterType="complain">
+		insert into complain values (#{complainId},#{emId},#{coName},
+		#{coText},#{cotime})
+		
+	</insert>
+	
+	
+	
+	<!-- 查询个人评价数 -->
+	<select id="getemnum" resultType="int">
+		select count(*) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询总评价数 -->
+	<select id="gettotalnum" resultType="int">
+		select count(*) from job_exam
+	</select>
+	
+	
+	
+	<!-- 查询各属性的平均值 -->
+	<!-- 查询工作量的平均值 -->
+	<select id="getWorkload" resultType="double">
+		select avg(workload) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getQuality" resultType="double">
+		select avg(quality) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getTimeuse" resultType="double">
+		select avg(timeuse) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getCommunicate" resultType="double">
+		select avg(communicate) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getDecision" resultType="double">
+		select avg(decision) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getInnovate" resultType="double">
+		select avg(innovate) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getExecute" resultType="double">
+		select avg(execute) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getResponsibility" resultType="double">
+		select avg(Responsibility) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getDiscipline" resultType="double">
+		select avg(Discipline) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getCooperation" resultType="double">
+		select avg(Cooperation) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getLog" resultType="double">
+		select avg(log) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getLearn" resultType="double">
+		select avg(learn) from job_exam where em_id = #{emId}
+	</select>
+	<!-- 查询工作量的平均值 -->
+	<select id="getAttendance" resultType="double">
+		select avg(Attendance) from job_exam where em_id = #{emId}
+	</select>
+	
+	
+</mapper>

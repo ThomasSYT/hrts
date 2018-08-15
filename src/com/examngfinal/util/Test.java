@@ -1,0 +1,10 @@
+package com.examngfinal.util;
+
+public class Test {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		System.out.println(MD5Util.string2MD5("12345678"));
+	}
+
+}

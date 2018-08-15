@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.examngfinal.dao.PayControllerDao">
+	 <!-- 根据薪资能力对员工分类A-->
+	<select id="findTotalDepartingA" resultType="jobExam">
+		select
+		em_id as emId, 
+		jb_emname as jbemname,
+		av.en as exnum,
+		av.avab as total 
+		from (SELECT em_id,jb_emname,max(ex_num) as en ,avg(total) as avab FROM job_exam GROUP BY em_id) as av
+		where av.avab &gt; 100 and av.avab &lt;=130
+	</select>
+	 <!-- 根据薪资能力对员工分类B-->
+	<select id="findTotalDepartingB" resultType="jobExam">
+		select
+		em_id as emId, 
+		jb_emname as jbemname,
+		av.en as exnum,
+		av.avab as total 
+		from (SELECT em_id,jb_emname,max(ex_num) as en ,avg(total) as avab FROM job_exam GROUP BY em_id) as av
+		where av.avab &gt; 80 and av.avab &lt;=100
+	</select>
+	 <!-- 根据薪资能力对员工分类C-->
+	<select id="findTotalDepartingC" resultType="jobExam">
+		select
+		em_id as emId, 
+		jb_emname as jbemname,
+		av.en as exnum,
+		av.avab as total 
+		from (SELECT em_id,jb_emname,max(ex_num) as en ,avg(total) as avab FROM job_exam GROUP BY em_id) as av
+		where av.avab &gt; 40 and av.avab &lt;=80
+	</select>
+	 <!-- 根据薪资能力对员工分类D-->
+	<select id="findTotalDepartingD" resultType="jobExam">
+		select
+		em_id as emId, 
+		jb_emname as jbemname,
+		av.en as exnum,
+		av.avab as total 
+		from (SELECT em_id,jb_emname,max(ex_num) as en ,avg(total) as avab FROM job_exam GROUP BY em_id) as av
+		where av.avab &gt; 0 and av.avab &lt;=40
+	</select>
+	
+	<!-- 查询薪资情况-->
+	<select id="findPayAll" resultType="tbPay">
+		select 
+		pay_id as payId,
+		em_id as emId,
+		pay_emName as payEmName,
+		pay_month as payMonth,
+		pay_baseMoney as payBaseMoney,
+		pay_overtime as payOvertime,
+		pay_safety as paySafety,
+		pay_absent as payAbsent
+		from tb_pay 
+	</select>
+	<!-- 查询薪资信息-->
+	<select id="findPay" parameterType="int" resultType="tbPay">
+		select 
+		pay_id as payId,
+		em_id as emId,
+		pay_emName as payEmName,
+		pay_month as payMonth,
+		pay_baseMoney as payBaseMoney,
+		pay_overtime as payOvertime,
+		pay_safety as paySafety,
+		pay_absent as payAbsent
+		from tb_pay 
+		where pay_id=#{payId}
+	</select>
+	
+	<!-- 添加薪资 -->
+	<insert id="addPay" parameterType="tbPay">
+		insert into tb_pay values (#{payId},#{emId},#{payEmName},
+		#{payMonth},#{payBaseMoney},#{payOvertime},#{paySafety},
+		#{payAbsent},#{payCheck},#{payAge})
+		
+	</insert>
+	<!-- 修改薪资 -->
+	<update id="changePay" parameterType="tbPay">
+	  update tb_pay set
+		pay_month =#{payMonth},
+		pay_baseMoney=#{payBaseMoney},
+		pay_overtime=#{payOvertime},
+		pay_safety =#{paySafety},
+		pay_absent=#{payAbsent}
+	   	where pay_id=#{payId}
+	</update>
+	
+</mapper>

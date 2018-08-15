@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.examngfinal.dao.JobLogDao">
+	 <!-- 查找项目经理日志 -->
+	<select id="findManagerLog" resultType="jobLog">
+		select 
+		jl.logid as logId,
+		jt.ta_emname as tlEmname,
+		jt.basetarget as tlBasetarget,
+		jl.logname as logname,
+		jl.logtext as logtext,
+		jl.date as date 
+		from job_log as jl LEFT JOIN job_task as jt on jt.taskid = jl.taskid
+	    where jl.role_id=2
+	</select>
+	<!-- 查找员工任务 -->
+	<select id="findEmployeeLog" resultType="jobLog">
+	  select 
+	  	jl.logid as logId,
+	  	jt.ta_emname as tlEmname,
+		jt.basetarget as tlBasetarget,
+		jl.logname as logname,
+		jl.logtext as logtext,
+		jl.date as date 
+		from job_log as jl LEFT JOIN job_task as jt on jt.taskid = jl.taskid
+	    where jl.role_id=3
+	</select>
+	<!-- 查找自己日志 -->
+	<select id="findMyLog" parameterType="int" resultType="jobLog">
+		select 
+		jl.logid as logId,
+		jt.ta_emname as tlEmname,
+		jt.basetarget as tlBasetarget,
+		jl.logname as logname,
+		jl.logtext as logtext,
+		jl.date as date 
+		from job_log as jl LEFT JOIN job_task as jt on jt.taskid = jl.taskid
+	    where jl.em_id=#{emId}
+	</select>
+	<!-- 查找日志信息 -->
+	<select id="findLog" parameterType="int" resultType="jobLog">
+		select 
+		jl.logid as logId,
+		jt.ta_emname as tlEmname,
+		jt.basetarget as tlBasetarget,
+		jl.logname as logname,
+		jl.logtext as logtext,
+		jl.date as date 
+		from job_log as jl LEFT JOIN job_task as jt on jt.taskid = jl.taskid
+	    where jl.logid=#{logId}
+	</select>
+	
+	<!-- 更新日志 -->
+	<update id="editLog" parameterType="jobLog">
+	  update job_log set
+		taskid=#{taskId},
+		tl_basetarget=#{tlBasetarget},
+	  	logname=#{logname},
+	  	logtext=#{logtext},
+	  	date=#{date}
+	   	where logid=#{logId}
+	</update>
+	
+	<!-- 添加日志 -->
+	<insert id="addLog" parameterType="jobLog">
+		insert into job_log values (#{logId},#{taskId},#{emId},
+		#{tlBasetarget},#{tlEmname},#{logname},#{logtext},#{date},#{roleId});
+	</insert>
+	
+	<!-- 删除日志 -->
+	<delete id="delLog" parameterType="int">
+		delete from job_log where logid=#{logId}
+	</delete>
+</mapper>

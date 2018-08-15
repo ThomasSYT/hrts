@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.examngfinal.dao.JobTaskDao">
+	 <!-- 查找项目经理任务 -->
+	<select id="findManagerTask" resultType="jobTask">
+		select 
+		jt.taskid as taskId,
+		jt.ta_emname as taEmname,
+		jt.basetarget as basetarget,
+		jt.challengetarget as challengetarget,
+		jt.begintime as begintime,
+		jt.deadline as deadline 
+		from tb_employee as te LEFT JOIN job_task as jt on te.em_id = jt.em_id
+	    where jt.role_id=2
+	</select>
+	<!-- 查找员工任务 -->
+	<select id="findEmployeeTask" resultType="jobTask">
+	  select 
+	  	jt.taskid as taskId,
+	  	jt.ta_emname as taEmname,
+		jt.basetarget as basetarget,
+		jt.challengetarget as challengetarget,
+		jt.begintime as begintime,
+		jt.deadline as deadline 
+		from tb_employee as te LEFT JOIN job_task as jt on te.em_id = jt.em_id
+	    where jt.role_id=3
+	</select>
+	<!-- 查找自己任务 -->
+	<select id="findMyTask" parameterType="int" resultType="jobTask">
+		select 
+		jt.taskid as taskId,
+		jt.ta_emname as taEmname,
+		jt.basetarget as basetarget,
+		jt.challengetarget as challengetarget,
+		jt.begintime as begintime,
+		jt.deadline as deadline 
+		from job_task as jt
+	    where jt.em_id=#{emId}
+	</select>
+	
+	<!-- 查找任务信息 -->
+	<select id="findTask" parameterType="int" resultType="jobTask">
+		select 
+		jt.taskid as taskId,
+		jt.ta_emname as taEmname,
+		jt.basetarget as basetarget,
+		jt.challengetarget as challengetarget,
+		jt.begintime as begintime,
+		jt.deadline as deadline 
+		from job_task as jt
+	    where jt.taskid=#{taskId}
+	</select>
+	
+	<!-- 更新员工信息 -->
+	<update id="editEmployeeTask" parameterType="jobTask">
+	  update job_task set
+	    em_id=#{emId},
+		ta_emname=#{taEmname},
+		basetarget=#{basetarget},
+		basetext=#{basetext},
+		challengetarget=#{challengetarget},
+	  	challengetext=#{challengetext},
+	  	deadline=#{deadline},
+	  	begintime=#{begintime},
+	  	role_id=3
+	   where taskid=#{taskId} 
+	</update>
+	<!-- 更新项目经理信息 -->
+	<update id="editManagerTask" parameterType="jobTask">
+	  update job_task set
+	    em_id=#{emId},
+		ta_emname=#{taEmname},
+		basetarget=#{basetarget},
+		basetext=#{basetext},
+		challengetarget=#{challengetarget},
+	  	challengetext=#{challengetext},
+	  	begintime=#{begintime},
+	  	deadline=#{deadline},
+	  	role_id=2
+	   where taskid=#{taskId} 
+	</update>
+	<!-- 添加项目经理信息 -->
+	<insert id="addEmployeeTask" parameterType="jobTask">
+		insert into job_task values (#{taskId},#{emId},#{taEmname},
+		#{basetarget},#{basetext},#{challengetarget},#{challengetext},#{begintime},#{deadline},3);
+	</insert>
+	<!-- 添加项目经理信息 -->
+	<insert id="addManagerTask" parameterType="jobTask">
+		insert into job_task values (#{taskId},#{emId},#{taEmname},
+		#{basetarget},#{basetext},#{challengetarget},#{challengetext},#{begintime},#{deadline},2);
+	</insert>
+	<!-- 删除任务信息 -->
+	<delete id="delTask" parameterType="int">
+		delete from job_task where taskid=#{taskId} 
+	</delete>
+</mapper>

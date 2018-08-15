@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.examngfinal.dao.JobLeDao">
+	 <!-- 显示我的请求 -->
+	<select id="findMyLeave" parameterType="int" resultType="jobLeave">
+		select 
+		leave_id as leaveId,
+		le_emname as leemname,
+		reasaon as reasaon,
+		begintime as begintime,
+		endtime as endtime,
+		le_state as lestate 
+		from job_leave
+	    where em_id=#{emId}
+	</select>
+	<!-- 显示所有请求 -->
+	<select id="findAllLeave" resultType="jobLeave">
+		select 
+		leave_id as leaveId,
+		le_emname as leemname,
+		reasaon as reasaon,
+		begintime as begintime,
+		endtime as endtime,
+		le_state as lestate 
+		from job_leave 
+	</select>
+	<!-- 显示培训记录 -->
+	<select id="findMyLearn" parameterType="int" resultType="jobLearn">
+	  select 
+	  	le_id as leId,
+	  	lea_emname as leaemname,
+		learntext as learntext,
+		learnadderss as learnadderss,
+		begintime as begintime,
+		endtime as endtime  
+	  from job_learn 
+	  where em_id=#{emId}
+	</select>
+	 <!-- 显示请求信息 -->
+	<select id="findLeave" parameterType="int" resultType="jobLeave">
+		select 
+		leave_id as leaveId,
+		le_emname as leemname,
+		reasaon as reasaon,
+		begintime as begintime,
+		endtime as endtime,
+		le_state as lestate 
+		from job_leave
+	    where leave_id=#{leaveId}
+	</select>
+	<!-- 显示培训信息 -->
+	<select id="findLearn" parameterType="int" resultType="jobLearn">
+		select 
+	  	le_id as leId,
+	  	lea_emname as leaemname,
+		learntext as learntext,
+		learnadderss as learnadderss,
+		begintime as begintime,
+		endtime as endtime  
+	    from job_learn 
+	    where le_id=#{leId}
+	</select>
+	
+	<!-- 申请处理 -->
+	<update id="changeState" parameterType="jobLeave">
+	UPDATE job_leave
+	   SET le_state = #{lestate}
+	 WHERE leave_id = #{leaveId}
+	</update>
+	
+	<!-- 添加请假申请 -->
+	<insert id="addLeave" parameterType="jobLeave">
+		insert into job_leave values (#{leaveId},#{emId},#{leemname},
+		#{reasaon},#{begintime},#{endtime},0)
+		
+	</insert>
+	<!-- 添加培训记录 -->
+	<insert id="addLearn" parameterType="jobLearn">
+		insert into job_learn values (#{leId},#{taskId},#{emId},
+		#{leaemname},#{learntext},#{learnadderss},#{begintime},#{endtime})
+		
+	</insert>
+	<!-- 删除培训记录 -->
+	<delete id="delLearn" parameterType="int">
+	 delete from job_learn where le_id=#{leId}
+	</delete>
+</mapper>

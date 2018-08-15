@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.examngfinal.dao.SysUserDao">
+	<resultMap id="user" type="com.examngfinal.bean.sys.SysUser">
+        <result column="em_id" property="empId" />
+        <result column="role_id" property="roleId" />
+        <result column="userid" property="userId" />
+        <result column="pwd" property="pwd" />
+        <result column="regDate" property="regDate" />  
+        <result column="em_name" property="employee.emName"/>  
+        <result column="em_sex" property="employee.emSex" />
+        <result column="em_age" property="employee.emAge" />
+        <result column="em_born" property="employee.emBorn"/>
+        <result column="em_bz" property="employee.emBz"/>
+        <result column="em_isstock" property="employee.emIsstock"/>
+        <result column="em_content" property="employee.emContent"/>
+        <result column="em_createtime" property="employee.emCreatetime"/>
+        <result column="em_address" property="employee.emAddress"/>
+        <result column="em_tel" property="employee.emTel"/>
+        <result column="em_afterSchool" property="employee.emAfterSchool"/>
+        <result column="em_teachSchool" property="employee.emTeachSchool"/>
+        <result column="em_experience" property="employee.emExperience"/>
+        <result column="dt_id" property="employee.dtId"/>
+    </resultMap> 
+    
+   <!--  <select id="getEmployeeByEmId" parameterType="int" resultType="Employee">
+    	select
+		    em_id as emId, 
+		    em_name as emName,
+			em_sex as emSex,
+			em_age as emAge,
+			em_born as emBorn,
+			em_bz as emBz,
+		  	em_isstock as emIsstock,
+		  	em_content as emContent,
+		  	em_createtime as emCreatetime,
+		  	em_address as emAddress,
+		  	em_tel as emTel,
+		  	em_afterSchool as emAfterSchool,
+		  	em_teachSchool as emTeachSchool,
+		  	em_experience as emExperience,
+		  	dt_id as dtId,
+		  	role_id as roleId 
+	     from tb_employee 
+	     where em_id = #{id}
+    </select>
+    <select id="getRoleByRoleId" parameterType="int" resultType="SysRole">
+    	select 
+    	from sys_role
+    	where role_id = #{id}
+    </select>
+    
+    <resultMap type="SysUser" id="UserByAss">
+    	<id column="userid" property="userId"/>
+    	<result column="pwd" property="pwd"/>
+    	<result column="regDate" property="regDate"/>
+    	<association property="employee" column="em_id" select="getEmployeeByEmId"/>
+    	<association property="role" column="role_id" select="getRoleByRoleId"/>
+    </resultMap>
+    
+    <select id="findUserByUserId" parameterType="int" resultMap="UserByAss">
+    	select * 
+    	from sys_user 
+    	where userid = #{userId} 
+    </select>
+    <select id="findAll" resultMap="UserByAss">
+    	select * from sys_user
+    </select> -->
+    
+    <!-- 分页 -->
+    <select id="selectByPage" resultType="employee">
+	SELECT 
+	em_id as emId,  
+		em_name as emName,
+		em_sex as emSex,
+		em_age as emAge,
+		em_born as emBorn,
+		em_bz as emBz,
+	  	em_isstock as emIsstock,
+	  	em_content as emContent,
+	  	em_createtime as emCreatetime,
+	  	em_address as emAddress,
+	  	em_tel as emTel,
+	  	em_afterSchool as emAfterSchool,
+	  	em_teachSchool as emTeachSchool,
+	  	em_experience as emExperience,
+	  	dt_id as dtId,
+	  	role_id as roleId
+	FROM tb_employee 
+	where em_state=1
+	ORDER BY em_id DESC LIMIT #{0},#{1}  
+	</select>
+	<select id="selectByPageDe" resultType="department">
+	SELECT 
+		dt_id as dtId,
+	    dt_creatTime as dtCreatTime,
+	    dt_name as dtName
+	FROM tb_department ORDER BY dt_id DESC LIMIT #{0},#{1}  
+	</select>
+	<select id="getPageCount" resultType="int">
+	SELECT count(*) from tb_employee 
+	</select>
+	<select id="getPageCountDe" resultType="int">
+	SELECT count(*) from tb_department 
+	</select>
+    
+    <!-- 模糊查询应聘员工 -->
+    <select id="findEmpMH" resultType="employee" parameterType="String">
+		select 
+		em_id as emId,  
+		em_name as emName,
+		em_sex as emSex,
+		em_age as emAge,
+		em_born as emBorn,
+		em_bz as emBz,
+	  	em_isstock as emIsstock,
+	  	em_content as emContent,
+	  	em_createtime as emCreatetime,
+	  	em_address as emAddress,
+	  	em_tel as emTel,
+	  	em_afterSchool as emAfterSchool,
+	  	em_teachSchool as emTeachSchool,
+	  	em_experience as emExperience,
+	  	dt_id as dtId,
+	  	role_id as roleId
+	  	from  tb_employee  
+		where em_state=0 AND em_name like #{0} 
+		 limit 8 
+	</select>
+	<!-- 模糊查询部门 -->
+	<select id="findDepartMH" resultType="department" parameterType="String">
+		select 
+	    dt_id as dtId,
+	    dt_creatTime as dtCreatTime,
+	    dt_name as dtName
+	    from tb_department
+		where dt_name like #{0} limit 8 
+	</select>
+    
+    <!-- 查找用户个人信息 -->
+	<select id="findUser"  resultType="user" >
+		select su.em_id as emId,
+		su.role_id as roleId,
+		su.userid as userId,
+		su.pwd as pwd,
+		su.regDate as regDate,
+		te.em_name as emName,
+		te.em_sex as emSex,
+		te.em_age as emAge,
+		te.em_born as emBorn,
+		te.em_bz as emBz,
+	  	te.em_isstock as emIsstock,
+	  	te.em_content as emContent,
+	  	te.em_createtime as emCreatetime,
+	  	te.em_address as emAddress,
+	  	te.em_tel as emTel,
+	  	te.em_afterSchool as emAfterSchool,
+	  	te.em_teachSchool as emTeachSchool,
+	  	te.em_experience as emExperience,
+	  	te.dt_id as dtId,
+	  	te.role_id as roleId
+	  	from sys_user as su LEFT OUTER JOIN tb_employee as te on  su.userid=te.em_id
+		where su.userid=#{userId} 
+	</select>
+	<!-- 查找员工个人信息 -->
+	<select id="findEmployee"  resultType="employee">
+		select 
+		te.em_id as emId,  
+		te.em_name as emName,
+		te.em_sex as emSex,
+		te.em_age as emAge,
+		te.em_born as emBorn,
+		te.em_bz as emBz,
+	  	te.em_isstock as emIsstock,
+	  	te.em_content as emContent,
+	  	te.em_createtime as emCreatetime,
+	  	te.em_address as emAddress,
+	  	te.em_tel as emTel,
+	  	te.em_afterSchool as emAfterSchool,
+	  	te.em_teachSchool as emTeachSchool,
+	  	te.em_experience as emExperience,
+	  	te.dt_id as dtId,
+	  	te.role_id as roleId
+	  	from  tb_employee as te 
+		where te.em_id=#{emId}  
+	</select>
+	<!-- 查找所有员工 -->
+	<select id="findUserAll" resultType="employee">
+	    select
+	    em_id as emId, 
+	    em_name as emName,
+		em_sex as emSex,
+		em_age as emAge,
+		em_born as emBorn,
+		em_bz as emBz,
+	  	em_isstock as emIsstock,
+	  	em_content as emContent,
+	  	em_createtime as emCreatetime,
+	  	em_address as emAddress,
+	  	em_tel as emTel,
+	  	em_afterSchool as emAfterSchool,
+	  	em_teachSchool as emTeachSchool,
+	  	em_experience as emExperience,
+	  	dt_id as dtId,
+	  	role_id as roleId 
+	     from tb_employee
+	     where em_state=1 
+	</select>
+	<!-- 查找所有管理员 -->
+	<select id="findAdminAll" resultType="employee">
+	    select
+	    em_id as emId, 
+	    em_name as emName,
+		em_sex as emSex,
+		em_age as emAge,
+		em_born as emBorn,
+		em_bz as emBz,
+	  	em_isstock as emIsstock,
+	  	em_content as emContent,
+	  	em_createtime as emCreatetime,
+	  	em_address as emAddress,
+	  	em_tel as emTel,
+	  	em_afterSchool as emAfterSchool,
+	  	em_teachSchool as emTeachSchool,
+	  	em_experience as emExperience,
+	  	dt_id as dtId,
+	  	role_id as roleId 
+	     from tb_employee
+	     where role_id=1 and em_state=1
+	</select>
+	<!-- 查找所有项目经理 -->
+	<select id="findManagerAll" resultType="employee">
+	    select
+	    em_id as emId, 
+	    em_name as emName,
+		em_sex as emSex,
+		em_age as emAge,
+		em_born as emBorn,
+		em_bz as emBz,
+	  	em_isstock as emIsstock,
+	  	em_content as emContent,
+	  	em_createtime as emCreatetime,
+	  	em_address as emAddress,
+	  	em_tel as emTel,
+	  	em_afterSchool as emAfterSchool,
+	  	em_teachSchool as emTeachSchool,
+	  	em_experience as emExperience,
+	  	dt_id as dtId,
+	  	role_id as roleId 
+	     from tb_employee
+	     where role_id=2 and em_state=1
+	</select>
+	<!-- 查找所有工人 -->
+	<select id="findEmployeeAll" resultType="employee">
+	    select
+	    em_id as emId, 
+	    em_name as emName,
+		em_sex as emSex,
+		em_age as emAge,
+		em_born as emBorn,
+		em_bz as emBz,
+	  	em_isstock as emIsstock,
+	  	em_content as emContent,
+	  	em_createtime as emCreatetime,
+	  	em_address as emAddress,
+	  	em_tel as emTel,
+	  	em_afterSchool as emAfterSchool,
+	  	em_teachSchool as emTeachSchool,
+	  	em_experience as emExperience,
+	  	dt_id as dtId,
+	  	role_id as roleId 
+	     from tb_employee
+	     where role_id=3 and em_state=1
+	</select>
+	<!-- 查找所有应聘者 -->
+	<select id="findApplicantAll" resultType="employee">
+	    select
+	    em_id as emId, 
+	    em_name as emName,
+		em_sex as emSex,
+		em_age as emAge,
+		em_born as emBorn,
+		em_bz as emBz,
+	  	em_isstock as emIsstock,
+	  	em_content as emContent,
+	  	em_createtime as emCreatetime,
+	  	em_address as emAddress,
+	  	em_tel as emTel,
+	  	em_afterSchool as emAfterSchool,
+	  	em_teachSchool as emTeachSchool,
+	  	em_experience as emExperience,
+	  	dt_id as dtId,
+	  	role_id as roleId 
+	     from tb_employee
+	     where em_state=0
+	</select>
+	<!-- 查找所有部门 -->
+	<select id="findDepartAll" resultType="department">
+	    select 
+	    dt_id as dtId,
+	    dt_creatTime as dtCreatTime,
+	    dt_name as dtName
+	    from tb_department
+	</select>
+	<!-- 查找部门信息 -->
+	<select id="findDepart" parameterType="int" resultType="department">
+	    select 
+	    dt_id as dtId,
+	    dt_creatTime as dtCreatTime,
+	    dt_name as dtName
+	    from tb_department
+	    where dt_id=#{dtId}
+	</select>
+	
+	<!-- 添加用户 -->
+	<insert id="addUser" parameterType="user">
+	  insert into sys_user(userid,pwd,em_id,role_id,regDate) values(#{userId},#{pwd},#{emId},#{roleId},#{regDate})
+
+	</insert>
+	<!-- 添加员工 -->
+	<insert id="addEmployee" parameterType="employee">
+	  insert into tb_employee
+	  (em_name,em_sex,em_age,em_born,em_bz,
+	  em_isstock,em_content,em_createtime,em_address,em_tel,em_afterSchool,
+	  em_teachSchool,em_experience,dt_id,role_id)
+	  values(#{emName},#{emSex},#{emAge},#{emBorn},#{emBz},#{emIsstock},#{emContent},
+	  #{emCreatetime},#{emAddress},#{emTel},#{emAfterSchool},#{emTeachSchool},
+	  #{emExperience},#{dtId},#{roleId})
+	</insert>
+	<!-- 添加部门 -->
+	<insert id="addDepart" parameterType="department">
+	  insert into tb_department
+	  (dt_id,dt_creatTime,dt_name)
+	  values(#{dtId},#{dtCreatTime},#{dtName})
+	</insert>
+	
+	
+	<!-- 更新用户状态为入职 -->
+	<update id="changeToY" parameterType="int">
+	  update tb_employee set em_state=1 where em_id=#{emId} 
+	</update>
+	<!-- 更新用户状态为离职 -->
+	<update id="changeToN" parameterType="int">
+	  update tb_employee set em_state=2 where em_id=#{emId} 
+	</update>
+	<!-- 更新用户信息 -->
+	<update id="editUser" parameterType="user">
+	  update sys_user set pwd=#{pwd},role_id=#{roleId},em_id=#{emId} where userid=#{userId} 
+	</update>
+	<!-- 更新员工信息 -->
+	<update id="editEmployee" parameterType="employee">
+	  update tb_employee set
+	    em_name=#{emName},
+		em_sex=#{emSex},
+		em_age=#{emAge},
+		em_born=#{emBorn},
+		em_bz=#{emBz},
+	  	em_isstock=#{emIsstock},
+	  	em_content=#{emContent},
+	  	em_createtime=#{emCreatetime},
+	  	em_address=#{emAddress},
+	  	em_tel=#{emTel},
+	  	em_afterSchool=#{emAfterSchool},
+	  	em_teachSchool=#{emTeachSchool},
+	  	em_experience=#{emExperience}
+	   where em_id=#{emId} 
+	</update>
+	<!-- 更新部门信息 -->
+	<update id="editDepart" parameterType="department">
+	  update tb_department set
+	    dt_id=#{dtId},
+	    dt_creatTime=#{dtCreatTime},
+	    dt_name=#{dtName}
+	   where dt_id=#{dtId} 
+	</update>
+	
+	<!-- 删除用户信息 -->
+	<delete id="delUser" parameterType="String">
+	 delete from sys_user where userId=#{userId}
+	</delete>
+	<!-- 删除部门信息 -->
+	<delete id="delDepart" parameterType="Integer">
+	 delete from tb_department where dt_id=#{dtId}
+	</delete>
+	<!-- 删除员工信息 -->
+	<delete id="delEmployee" parameterType="Integer">
+	 delete from tb_employee where em_id=#{emId}
+	</delete>
+</mapper>
